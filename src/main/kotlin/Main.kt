@@ -1,5 +1,6 @@
 import days.Day1_1Runner
 import helper.DayRunner
+import helper.ResourceLineReader
 
 object Main {
 
@@ -20,6 +21,18 @@ object Main {
                 val result = handleRun(restOfArguments)
                 println("result: $result")
             }
+            "test" -> {
+                val allPassed = handleTests(restOfArguments)
+                if (allPassed == null) {
+                    println("failed to run test cases")
+                    return
+                }
+
+                return when (allPassed) {
+                    true -> println("all test cases passed 🎉")
+                    false -> println("some test cases failed ❌")
+                }
+            }
             else -> {
                 println("unknown usage")
                 return printHelp()
@@ -31,6 +44,7 @@ object Main {
         println("usage:")
         println("* `help` - shows this message")
         println("* `run 1-1` - runs a given runner")
+        println("* `test 1-1` - tests a given runner")
     }
 
     private fun handleRun(arguments: List<String>): String? {
@@ -46,6 +60,39 @@ object Main {
             return null
         }
 
-        return runner.run()
+        val inputs = ResourceLineReader.readLines(day) ?: listOf()
+        return runner.run(inputs)
+    }
+
+    private fun handleTests(arguments: List<String>): Boolean? {
+        val day = arguments.firstOrNull()
+        if (day == null) {
+            println("must specify a day to test")
+            return null
+        }
+
+        val runner = runners[day]
+        if (runner == null) {
+            println("unknown day to test, choose from: ${runners.keys}")
+            return null
+        }
+
+        println("running test cases:")
+        val results = runner.testCases.map {
+            val result = runner.run(it.first)
+            val correct = it.second == result
+            when (correct) {
+                true -> {
+                    println(" ${it.first} produced $result ✅")
+                }
+                else -> {
+                    println(" ${it.first} produced $result instead of ${it.second} ❌")
+                }
+            }
+
+            return@map correct
+        }
+
+        return results.all { it }
     }
 }
