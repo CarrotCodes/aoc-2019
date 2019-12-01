@@ -28,7 +28,7 @@ class Day1_2Runner: DayRunner {
     override fun run(inputs: List<String>): String {
         val results = inputs.map {
             val input = it.toInt()
-            recursivelyCompute(input)
+            lazilyCompute(input)
         }
         val result = results.sum()
         return result.toString()
@@ -45,5 +45,14 @@ class Day1_2Runner: DayRunner {
 
             cost += lastCost
         }
+    }
+
+    private fun lazilyCompute(input: Int): Int {
+        val initial = Day1_1Runner.compute(input)
+        val sequence = generateSequence(initial) {
+            Day1_1Runner.compute(it)
+        }
+        val costs = sequence.takeWhile { it > 0 }
+        return costs.sum()
     }
 }
