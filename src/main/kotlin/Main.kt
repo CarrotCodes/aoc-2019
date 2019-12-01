@@ -1,11 +1,13 @@
 import days.Day1_1Runner
+import days.Day1_2Runner
 import helper.DayRunner
 import helper.ResourceLineReader
 
 object Main {
 
     private val runners = mapOf<String, DayRunner>(
-        "1-1" to Day1_1Runner()
+        "1-1" to Day1_1Runner(),
+        "1-2" to Day1_2Runner()
     )
 
     @JvmStatic fun main(args: Array<String>) {

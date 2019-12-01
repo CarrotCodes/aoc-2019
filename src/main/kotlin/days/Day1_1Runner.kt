@@ -20,6 +20,13 @@ class Day1_1Runner: DayRunner {
     Result: 3216868
      */
 
+    companion object {
+        fun compute(input: Int): Int {
+            val dividedAndFloored = floor(input / 3.0).toInt()
+            return dividedAndFloored - 2
+        }
+    }
+
     override val testCases = listOf(
         Pair(listOf("12"), "2"),
         Pair(listOf("14"), "2"),
@@ -34,10 +41,5 @@ class Day1_1Runner: DayRunner {
         }
         val result = results.sum()
         return result.toString()
-    }
-
-    private fun compute(input: Int): Int {
-        val dividedAndFloored = floor(input / 3.0).toInt()
-        return dividedAndFloored - 2
     }
 }
