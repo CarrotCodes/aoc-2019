@@ -28,43 +28,53 @@ class Day2_1Runner: DayRunner {
         Pair(listOf("1,1,1,4,99,5,6,0,99"), "30,1,1,4,2,5,6,0,99")
     )
 
+    companion object {
+
+        fun run(program: List<Int>): List<Int> {
+            val output = program.toMutableList()
+            var index = 0
+
+            loop@while (true) {
+                val opCode = output[index]
+                when (opCode) {
+                    1 -> {
+                        val indexOfFirst = output[index + 1]
+                        val indexOfSecond = output[index + 2]
+                        val indexOfStorage = output[index + 3]
+
+                        val first = output[indexOfFirst]
+                        val second = output[indexOfSecond]
+
+                        output[indexOfStorage] = first + second
+                        index += 4
+                    }
+                    2 -> {
+                        val indexOfFirst = output[index + 1]
+                        val indexOfSecond = output[index + 2]
+                        val indexOfStorage = output[index + 3]
+
+                        val first = output[indexOfFirst]
+                        val second = output[indexOfSecond]
+
+                        output[indexOfStorage] = first * second
+                        index += 4
+                    }
+                    99 -> break@loop
+                    else -> throw RuntimeException("unexpected opcode $opCode at position $index")
+                }
+            }
+
+            return output
+        }
+    }
+
     override fun run(inputs: List<String>): String {
         val parsedInput = inputs
             .first()
             .split(",")
             .map { it.toInt() }
-        val output = parsedInput.toMutableList()
-        var index = 0
 
-        loop@while (true) {
-            val opCode = output[index]
-            when (opCode) {
-                1 -> {
-                    val indexOfFirst = output[index + 1]
-                    val indexOfSecond = output[index + 2]
-                    val indexOfStorage = output[index + 3]
-
-                    val first = output[indexOfFirst]
-                    val second = output[indexOfSecond]
-
-                    output[indexOfStorage] = first + second
-                    index += 4
-                }
-                2 -> {
-                    val indexOfFirst = output[index + 1]
-                    val indexOfSecond = output[index + 2]
-                    val indexOfStorage = output[index + 3]
-
-                    val first = output[indexOfFirst]
-                    val second = output[indexOfSecond]
-
-                    output[indexOfStorage] = first * second
-                    index += 4
-                }
-                99 -> break@loop
-                else -> throw RuntimeException("unexpected opcode $opCode at position $index")
-            }
-        }
+        val output = run(parsedInput)
 
         return output.joinToString(",")
     }
